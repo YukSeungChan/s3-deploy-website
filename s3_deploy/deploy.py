@@ -111,7 +111,7 @@ def upload_key(obj, path, cache_rules, dry, storage_class=None):
         content_file.close()
 
 
-def deploy(conf, base_path, force, dry):
+def deploy(conf, base_path, force, dry, delete):
     """Deploy using given configuration."""
     bucket_name = conf['s3_bucket']
     cache_rules = conf.get('cache_rules', [])
@@ -139,7 +139,7 @@ def deploy(conf, base_path, force, dry):
         # Delete keys that have been deleted locally
         if not os.path.isfile(path):
             logger.info('Deleting {}...'.format(obj.key))
-            if not dry:
+            if not dry and delete:
                 obj.delete()
             updated_keys.add(obj.key)
             continue
